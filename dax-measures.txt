@@ -1,0 +1,174 @@
+===========================================
+BUSINESS SALES PERFORMANCE – DAX MEASURES
+===========================================
+
+-------------------------------------------
+BASIC MEASURES
+-------------------------------------------
+
+1. Total Sales
+Total Sales = 
+SUM('Sales_Data'[Sales])
+
+-------------------------------------------
+
+2. Total Profit
+Total Profit = 
+SUM('Sales_Data'[Profit])
+
+-------------------------------------------
+
+3. Total Quantity Sold
+Total Quantity = 
+SUM('Sales_Data'[Quantity])
+
+-------------------------------------------
+KPI MEASURES
+-------------------------------------------
+
+4. Profit Margin %
+Profit Margin % = 
+DIVIDE(
+    [Total Profit],
+    [Total Sales],
+    0
+) * 100
+
+-------------------------------------------
+
+5. Average Order Value (AOV)
+Average Order Value = 
+DIVIDE(
+    [Total Sales],
+    COUNT('Sales_Data'[Order_Date]),
+    0
+)
+
+-------------------------------------------
+
+6. Total Orders
+Total Orders = 
+DISTINCTCOUNT('Sales_Data'[Order_Date])
+
+-------------------------------------------
+TIME INTELLIGENCE MEASURES
+-------------------------------------------
+
+7. Sales Previous Year
+Sales PY = 
+CALCULATE(
+    [Total Sales],
+    SAMEPERIODLASTYEAR('Sales_Data'[Order_Date])
+)
+
+-------------------------------------------
+
+8. Year-over-Year Sales Growth %
+YoY Sales Growth % = 
+DIVIDE(
+    [Total Sales] - [Sales PY],
+    [Sales PY],
+    0
+) * 100
+
+-------------------------------------------
+
+9. Monthly Sales
+Monthly Sales = 
+CALCULATE(
+    [Total Sales],
+    ALLEXCEPT(
+        'Sales_Data',
+        'Sales_Data'[Year],
+        'Sales_Data'[Month]
+    )
+)
+
+-------------------------------------------
+PRODUCT ANALYSIS MEASURES
+-------------------------------------------
+
+10. Sales Contribution %
+Sales Contribution % = 
+DIVIDE(
+    [Total Sales],
+    CALCULATE(
+        [Total Sales],
+        ALL('Sales_Data'[Product])
+    ),
+    0
+) * 100
+
+-------------------------------------------
+
+11. Profit by Category
+Profit by Category = 
+CALCULATE(
+    [Total Profit],
+    ALLEXCEPT(
+        'Sales_Data',
+        'Sales_Data'[Category]
+    )
+)
+
+-------------------------------------------
+REGIONAL ANALYSIS MEASURES
+-------------------------------------------
+
+12. Sales by Region
+Sales by Region = 
+CALCULATE(
+    [Total Sales],
+    ALLEXCEPT(
+        'Sales_Data',
+        'Sales_Data'[Region]
+    )
+)
+
+-------------------------------------------
+
+13. Profit by Region
+Profit by Region = 
+CALCULATE(
+    [Total Profit],
+    ALLEXCEPT(
+        'Sales_Data',
+        'Sales_Data'[Region]
+    )
+)
+
+-------------------------------------------
+
+14. Profit Margin by Region %
+Profit Margin by Region % = 
+DIVIDE(
+    [Profit by Region],
+    [Sales by Region],
+    0
+) * 100
+
+-------------------------------------------
+ADVANCED BUSINESS METRICS
+-------------------------------------------
+
+15. High Profit Indicator
+High Profit Indicator = 
+IF(
+    [Profit Margin %] >= 20,
+    "High Profit",
+    "Low Profit"
+)
+
+-------------------------------------------
+
+16. Revenue Trend Indicator
+Revenue Trend Indicator = 
+IF(
+    [YoY Sales Growth %] > 0,
+    "Growth 📈",
+    "Decline 📉"
+)
+
+-------------------------------------------
+END OF DAX MEASURES
+-------------------------------------------
